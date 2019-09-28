@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<SplitPane dividerPositions="0.28281117696867064" nodeOrientation="LEFT_TO_RIGHT" prefHeight="798.0" prefWidth="1234.0" xmlns="http://javafx.com/javafx/8.0.221" xmlns:fx="http://javafx.com/fxml/1">
+  <items>
+    <AnchorPane maxWidth="330.0" minHeight="0.0" minWidth="330.0" prefHeight="160.0" prefWidth="100.0">
+         <children>
+            <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <HBox prefHeight="35.0" prefWidth="200.0" VBox.vgrow="NEVER">
+                     <children>
+                        <TextField fx:id="searchBar" prefHeight="35.0" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="searchButton" mnemonicParsing="false" prefHeight="35.0" text="Szukaj" HBox.hgrow="ALWAYS" />
+                     </children>
+                  </HBox>
+                  <HBox minHeight="60.0" prefHeight="60.0" prefWidth="330.0" VBox.vgrow="NEVER">
+                     <children>
+                        <VBox prefHeight="200.0" prefWidth="100.0" spacing="7.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <CheckBox fx:id="priorityCheckBox" mnemonicParsing="false" text="Priorytetowe" />
+                              <CheckBox fx:id="archivedCheckBox" mnemonicParsing="false" text="Zarchiwizowane" />
+                           </children>
+                           <padding>
+                              <Insets top="5.0" />
+                           </padding>
+                        </VBox>
+                        <VBox prefHeight="200.0" prefWidth="100.0" spacing="7.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <CheckBox fx:id="activeCheckBox" mnemonicParsing="false" text="Aktywne" />
+                              <CheckBox fx:id="pendingCheckBox" mnemonicParsing="false" text="Oczekujące" />
+                           </children>
+                           <padding>
+                              <Insets top="5.0" />
+                           </padding>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <ListView fx:id="caseList" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                  <HBox prefHeight="35.0" prefWidth="330.0">
+                     <children>
+                        <Button fx:id="addCaseButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="35.0" text="Dodaj" textAlignment="JUSTIFY" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="archiveCaseButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="35.0" text="Zarchiwizuj" HBox.hgrow="ALWAYS" />
+                        <ToggleButton fx:id="editCaseToggleButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="35.0" text="Edytuj" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="linkCaseButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="35.0" text="Powiąż" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="deleteCaseButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="35.0" text="Usuń" HBox.hgrow="ALWAYS" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children></AnchorPane>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+         <children>
+            <HBox prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <SplitPane dividerPositions="0.6147443519619501" minHeight="-Infinity" prefHeight="160.0" prefWidth="770.0" HBox.hgrow="ALWAYS">
+                    <items>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
+                      <AnchorPane maxWidth="340.0" minHeight="0.0" minWidth="340.0" prefHeight="160.0" prefWidth="100.0" SplitPane.resizableWithParent="false">
+                           <children>
+                              <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <ListView fx:id="fileList" editable="true" nodeOrientation="LEFT_TO_RIGHT" prefWidth="257.0" VBox.vgrow="ALWAYS" />
+                                    <HBox VBox.vgrow="NEVER">
+                                       <children>
+                                          <Button fx:id="addFileButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="35.0" prefWidth="50.0" text="Dodaj" HBox.hgrow="ALWAYS" />
+                                          <Button fx:id="deleteFileButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="35.0" prefWidth="50.0" text="Usuń" />
+                                          <Button fx:id="downloadFileButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="35.0" prefWidth="75.0" text="Pobierz" HBox.hgrow="ALWAYS" />
+                                          <Button fx:id="downloadAllFileButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="35.0" prefWidth="140.0" text="Pobierz wszystko" HBox.hgrow="ALWAYS" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </AnchorPane>
+                    </items>
+                  </SplitPane>
+               </children>
+            </HBox>
+         </children></AnchorPane>
+  </items>
+</SplitPane>
