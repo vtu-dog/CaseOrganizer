@@ -7,7 +7,8 @@ public class Main {
     public static void main(String[] args) {
         try {
             FTPConn conn = new FTPConn("localhost", "admin", "admin");
-            conn.readRootMetadata();
+            //conn.readRootMetadata();
+            conn.createCase("123abcaaa");
             conn.closeConn();
         } catch (Exception e) { System.out.println(e); }
     }
