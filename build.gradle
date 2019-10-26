@@ -5,12 +5,13 @@ plugins {
 
 repositories {
     mavenCentral()
+    maven { url "https://jitpack.io" }
 }
 
 dependencies {
-    //
+    compile 'com.github.asbachb:ftp4j:ftp4j-1.7.3'
 }
 
 application {
-    mainClassName = 'app.Main'
+    mainClassName = 'app.main.Main'
 }

@@ -16,5 +16,14 @@ public class Main extends Application {
         stage.setTitle("Zarządca postępowań");
         stage.setScene(new Scene(loader.load(), 500, 500));
         stage.show();
+
+        /*
+        // connection example
+        try {
+            FTPConn conn = new FTPConn("localhost", "admin", "admin");
+            conn.createCase("123abcaaa");
+            conn.closeConn();
+        } catch (Exception e) { System.out.println(e); }
+        */
     }
 }
