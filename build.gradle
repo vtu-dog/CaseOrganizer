@@ -10,9 +10,6 @@ repositories {
 
 dependencies {
     compile 'com.github.asbachb:ftp4j:ftp4j-1.7.3'
-    compile 'commons-io:commons-io:2.6'
-
-    //compile 'org.simpleframework:simple-xml:2.7.1'
 }
 
 application {
