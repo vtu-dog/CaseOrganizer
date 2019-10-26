@@ -4,14 +4,17 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import javafx.scene.*;
+import app.controllers.*;
 
 public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/GUI.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI.fxml"));
+        MainController controller = new MainController();
+        loader.setController(controller);
 
         stage.setTitle("Zarządca postępowań");
-        stage.setScene(new Scene(root, 500, 500));
+        stage.setScene(new Scene(loader.load(), 500, 500));
         stage.show();
     }
 }
