@@ -10,6 +10,9 @@ public class MainController {
 
     @FXML private Button searchBox;
     @FXML private SearchBoxController searchBoxController;
+    @FXML private CaseViewController caseViewController;
+    @FXML private FileViewController fileViewController;
+
 
     public MainController () {
         System.out.println("MainController");

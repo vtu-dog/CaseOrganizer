@@ -17,7 +17,6 @@ import java.io.File;
 import java.io.*;
 
 import app.xml.BasicCase;
-import app.xml.ServerMeta;
 
 
 public class FTPConn {
