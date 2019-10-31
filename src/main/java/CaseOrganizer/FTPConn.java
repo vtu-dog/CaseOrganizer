@@ -21,10 +21,10 @@ import app.xml.BasicCase;
 
 public class FTPConn {
 
-    protected final String ftpDir = "CaseOrganizer";
+    protected final String ftpDir = "/CaseOrganizer/";
     private FTPClient client = null;
 
-    public FTPConn (String addr, String login, String passwd) throws Exception {
+    public FTPConn (String addr, String login, String passwd) throws IOException, FTPIllegalReplyException, FTPException {
         client = new FTPClient();
         client.connect(addr);
         client.login(login, passwd);
@@ -62,11 +62,13 @@ public class FTPConn {
         client.upload("meta.xml", new ByteArrayInputStream(metaFile.toByteArray()), 0, 0, null);
     }
 
-    public void closeConn () throws Exception {
-        if (client != null) {
-            client.disconnect(true);
-            client = null;
-        }
+    public void closeConn () {
+        try {
+            if (client != null) {
+                client.disconnect(true);
+                client = null;
+            }
+        } catch (Exception ignore) { }
     }
 
     public List<String> listDirs () throws Exception {
@@ -91,7 +93,7 @@ public class FTPConn {
             return (BasicCase) jaxbUnmarshaller.unmarshal(new ByteArrayInputStream(metaFile.toByteArray()));
         }
         catch (Exception e) { throw e; }
-        finally { client.changeDirectory("/"); }
+        finally { client.changeDirectory(ftpDir); }
     }
 
     public void createCase (String letterNumber) throws Exception {
@@ -107,7 +109,7 @@ public class FTPConn {
             uploadMetadata(newCase);
         }
         catch (Exception e) { throw e; }
-        finally { client.changeDirectory("/"); }
+        finally { client.changeDirectory(ftpDir); }
 
     }
 
@@ -118,11 +120,11 @@ public class FTPConn {
             for (FTPFile file : client.list())
                 client.deleteFile(file.getName());
 
-            client.changeDirectory("/");
+            client.changeDirectory(ftpDir);
             client.deleteDirectory(caseName);
         }
         catch (Exception e) { throw e; }
-        finally { client.changeDirectory("/"); }
+        finally { client.changeDirectory(ftpDir); }
     }
 
     public ByteArrayOutputStream downloadFile (String filename) throws Exception {

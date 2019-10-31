@@ -10,6 +10,7 @@ repositories {
 
 dependencies {
     compile 'com.github.asbachb:ftp4j:ftp4j-1.7.3'
+    compile group: 'commons-configuration', name: 'commons-configuration', version: '1.10'
 }
 
 application {
