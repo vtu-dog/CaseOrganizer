@@ -9,6 +9,7 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
@@ -37,28 +38,28 @@ class DateAdapter extends XmlAdapter <String, Date> {
 public class BasicCase {
 
     Boolean isPriority = false;
-    Boolean isActive = false;
+    Boolean isActive = true;
     Boolean isArchived = false;
     Boolean isPending = false;
 
-    String company;
-    String from;
-    String concerning;
-    String inspectionPeriod;
-    String plannedEndDate;
-    String caseNumber;
-    String letterNumber;
-    String correspondenceDescription;
-    String remaining;
-    String deliveryMethod;
-    String plannedReplyDate;
-    String deliveryConfirmation;
-    String hearing;
-    String comments;
+    String company = "";
+    String from = "";
+    String concerning = "";
+    String inspectionPeriod = "";
+    String plannedEndDate = "";
+    String caseNumber = "";
+    String letterNumber = "";
+    String correspondenceDescription = "";
+    String remaining = "";
+    String deliveryMethod = "";
+    String plannedReplyDate = "";
+    String deliveryConfirmation = "";
+    String hearing = "";
+    String comments = "";
 
     @XmlJavaTypeAdapter(DateAdapter.class)
-    Date dateReceived;
-    Integer replyDeadline;
+    Date dateReceived = Calendar.getInstance().getTime();
+    Integer replyDeadline = 99999;
 
     @XmlElementWrapper(name = "links")
     @XmlElement(name = "link")
@@ -66,6 +67,48 @@ public class BasicCase {
 
 
     public BasicCase () { }
+
+
+    @Override
+    public String toString () {
+        return (this.letterNumber);
+    }
+
+
+    public void setIsPriority (Boolean isPriority) {
+        this.isPriority = isPriority;
+    }
+
+    public Boolean getIsPriority () {
+        return isPriority;
+    }
+
+
+    public void setIsActive (Boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    public Boolean getIsActive () {
+        return isActive;
+    }
+
+
+    public void setIsArchived (Boolean isArchived) {
+        this.isArchived = isArchived;
+    }
+
+    public Boolean getIsArchived () {
+        return isArchived;
+    }
+
+
+    public void setIsPending (Boolean isPending) {
+        this.isPending = isPending;
+    }
+
+    public Boolean getIsPending () {
+        return isPending;
+    }
 
 
     public void setCompany (String company) {

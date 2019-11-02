@@ -14,5 +14,15 @@ dependencies {
 }
 
 application {
-    mainClassName = 'app.main.Main'
+    mainClassName = 'app.Main'
+}
+
+jar {
+    manifest {
+        attributes "Main-Class": "app.Main"
+    }
+
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }

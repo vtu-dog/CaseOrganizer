@@ -1,4 +1,4 @@
-package app.main;
+package app;
 
 import java.io.IOException;
 
@@ -15,8 +15,6 @@ import javafx.stage.WindowEvent;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.PropertiesConfiguration;
 
-import it.sauronsoftware.ftp4j.FTPIllegalReplyException;
-
 import app.controllers.MainController;
 import app.dialogs.Dialogs;
 import app.ftpconn.FTPConn;
@@ -30,6 +28,12 @@ public class Main extends Application {
     public void start (Stage stage) {
 
         try {
+            Thread.currentThread().setUncaughtExceptionHandler((thread, throwable) -> {
+                Dialogs.ExceptionDialog(new Exception(throwable));
+                if (conn != null) conn.closeConn();
+                System.exit(1);
+            });
+
             Configuration config = new PropertiesConfiguration("./config.ini");
             String host = config.getString("host");
             String user = config.getString("user");
@@ -38,14 +42,12 @@ public class Main extends Application {
             FTPConn conn = new FTPConn(host, user, passwd);
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI.fxml"));
-            MainController controller = new MainController();
-            controller.setFTPConnection(conn);
-
+            MainController controller = new MainController(conn);
             loader.setController(controller);
 
-            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            stage.setOnCloseRequest(new EventHandler<WindowEvent> () {
                 @Override
-                public void handle(WindowEvent t) {
+                public void handle (WindowEvent t) {
                     Platform.exit();
                     System.exit(0);
                 }
@@ -57,10 +59,12 @@ public class Main extends Application {
             stage.show();
         }
 
+        /*
         catch (IOException e) {
             Dialogs.ErrorDialog("Błąd połączenia z serwerem");
             System.exit(1);
         }
+        */
 
         catch (Exception e) {
             Dialogs.ExceptionDialog(e);
