@@ -190,11 +190,15 @@ public class MainController {
 
         if (!s.equals("")) {
             try {
-                List<String> links = c.getLinks();
-                links.add(s);
-                c.setLinks(links);
-                conn.replaceMetadata(c);
-                Dialogs.InfoDialog("Sprawa powiązana pomyślnie", "Aby wyświetlić wszystkie powiązania, kliknij Pokaż powiązane");
+                if (cases.stream().filter(x -> x.toString().equals(s)).collect(Collectors.toList()).size() >= 1) {
+                    List<String> links = c.getLinks();
+                    links.add(s);
+                    c.setLinks(links);
+                    conn.replaceMetadata(c);
+                    Dialogs.InfoDialog("Sprawa powiązana pomyślnie", "Aby wyświetlić wszystkie powiązania, kliknij Pokaż powiązane");
+                } else {
+                    Dialogs.InfoDialog("Nie można było powiązać sprawy", "Prawdopodobnie wybrany nr pisma nie został zarejestrowany");
+                }
             } catch (Exception ignore) {
                 Dialogs.InfoDialog("Nie można było powiązać sprawy", "Prawdopodobnie wybrany nr pisma nie został zarejestrowany");
             }

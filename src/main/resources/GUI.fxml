@@ -130,10 +130,10 @@
                                           <ListView fx:id="fileList" editable="true" nodeOrientation="LEFT_TO_RIGHT" prefWidth="257.0" VBox.vgrow="ALWAYS" />
                                           <HBox VBox.vgrow="NEVER">
                                              <children>
-                                                <Button fx:id="addFileButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="35.0" prefWidth="50.0" text="Dodaj" HBox.hgrow="ALWAYS" />
-                                                <Button fx:id="deleteFileButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="35.0" prefWidth="50.0" text="Usuń" />
-                                                <Button fx:id="downloadFileButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="35.0" prefWidth="75.0" text="Pobierz" HBox.hgrow="ALWAYS" />
-                                                <Button fx:id="downloadAllFileButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="35.0" prefWidth="140.0" text="Pobierz wszystko" HBox.hgrow="ALWAYS" />
+                                                <Button fx:id="addFileButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addFile" prefHeight="35.0" prefWidth="50.0" text="Dodaj" HBox.hgrow="ALWAYS" />
+                                                <Button fx:id="deleteFileButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#deleteFile" prefHeight="35.0" prefWidth="50.0" text="Usuń" />
+                                                <Button fx:id="downloadFileButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#downloadFile" prefHeight="35.0" prefWidth="75.0" text="Pobierz" HBox.hgrow="ALWAYS" />
+                                                <Button fx:id="downloadAllFileButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#downloadAllFiles" prefHeight="35.0" prefWidth="140.0" text="Pobierz wszystko" HBox.hgrow="ALWAYS" />
                                              </children>
                                           </HBox>
                                        </children>
