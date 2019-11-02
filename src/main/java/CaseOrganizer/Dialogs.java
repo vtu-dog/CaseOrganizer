@@ -51,14 +51,14 @@ public class Dialogs {
         alert.setTitle("Błąd");
         alert.setHeaderText(header);
         alert.setContentText(msg);
-        alert.show();
+        alert.showAndWait();
     }
 
-    public static void WarningDialog (String msg) {
+    public static void WarningDialog (String msg1, String msg2) {
         Alert alert = new Alert(AlertType.WARNING);
         alert.setTitle("Ostrzeżenie");
-        alert.setHeaderText(header);
-        alert.setContentText(msg);
+        alert.setHeaderText(msg1);
+        alert.setContentText(msg2);
         alert.showAndWait();
     }
 

@@ -56,9 +56,18 @@ public class FTPConn {
                 client.connect(addr);
                 client.login(login, passwd);
                 client.setAutoNoopTimeout(noop);
+            }
+            catch (Exception e) {
+                throw e;
+            }
+            finally {
                 client.changeDirectory(ftpDir);
-            } catch (Exception e) { throw e; }
+            }
         }
+    }
+
+    public void noop () throws Exception {
+        relog();
     }
 
     public void closeConn () {
@@ -96,67 +105,118 @@ public class FTPConn {
     }
 
     public void replaceMetadata (BasicCase caseObj) throws Exception {
-        relog();
-        client.changeDirectory(ftpDir + getMD5(caseObj.getLetterNumber()));
-        uploadMetadata(caseObj);
-        client.changeDirectory(ftpDir);
+        try {
+            relog();
+            client.changeDirectory(ftpDir + getMD5(caseObj.getLetterNumber()));
+            uploadMetadata(caseObj);
+        }
+        catch (Exception e) {
+            throw e;
+        }
+        finally {
+            client.changeDirectory(ftpDir);
+        }
     }
 
-    public List<String> listDirs () throws Exception {
-        relog();
+    public List<String> listDirs (String path) throws Exception {
+        try {
+            relog();
 
-        List<String> outputList = new ArrayList<String>();
-        FTPFile[] serverList = client.list();
+            if (path != null)
+                client.changeDirectory(ftpDir + getMD5(path));
 
-        for (FTPFile file : serverList)
-            outputList.add(file.getName());
-        return outputList;
+            List<String> outputList = new ArrayList<String>();
+            FTPFile[] serverList = client.list();
+
+            for (FTPFile file : serverList)
+                outputList.add(file.getName());
+            return outputList;
+        }
+        catch (Exception e) {
+            throw e;
+        }
+        finally {
+            client.changeDirectory(ftpDir);
+        }
     }
 
     public BasicCase readMetadata (String caseHash) throws Exception {
-        relog();
-        client.changeDirectory(caseHash);
+        try {
+            relog();
+            client.changeDirectory(caseHash);
 
-        ByteArrayOutputStream metaFile = new ByteArrayOutputStream();
-        client.download("meta.xml", metaFile, 0, null);
+            ByteArrayOutputStream metaFile = new ByteArrayOutputStream();
+            client.download("meta.xml", metaFile, 0, null);
 
-        JAXBContext jaxbContext = JAXBContext.newInstance(BasicCase.class);
-        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-        client.changeDirectory(ftpDir);
-        return (BasicCase) jaxbUnmarshaller.unmarshal(new ByteArrayInputStream(metaFile.toByteArray()));
+            JAXBContext jaxbContext = JAXBContext.newInstance(BasicCase.class);
+            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+            return (BasicCase) jaxbUnmarshaller.unmarshal(new ByteArrayInputStream(metaFile.toByteArray()));
+        }
+        catch (Exception e) {
+            throw e;
+        }
+        finally {
+            client.changeDirectory(ftpDir);
+        }
     }
 
     public void createCase (String letterNumber) throws Exception {
-        relog();
-        String caseHash = getMD5(letterNumber);
+        try {
+            relog();
+            String caseHash = getMD5(letterNumber);
 
-        client.createDirectory(caseHash);
-        client.changeDirectory(caseHash);
+            client.createDirectory(caseHash);
+            client.changeDirectory(caseHash);
 
-        BasicCase newCase = new BasicCase();
-        newCase.setLetterNumber(letterNumber);
+            BasicCase newCase = new BasicCase();
+            newCase.setLetterNumber(letterNumber);
 
-        uploadMetadata(newCase);
-        client.changeDirectory(ftpDir);
+            uploadMetadata(newCase);
+        }
+        catch (Exception e) {
+            throw e;
+        }
+        finally {
+            client.changeDirectory(ftpDir);
+        }
     }
 
     public void deleteCase (BasicCase caseObj) throws Exception {
-        relog();
-        String caseName = getMD5(caseObj.getLetterNumber());
-        client.changeDirectory(caseName);
+        try {
+            relog();
+            String caseName = getMD5(caseObj.getLetterNumber());
+            client.changeDirectory(caseName);
 
-        for (FTPFile file : client.list())
-            client.deleteFile(file.getName());
+            for (FTPFile file : client.list())
+                client.deleteFile(file.getName());
 
-        client.changeDirectory(ftpDir);
-        client.deleteDirectory(caseName);
+            client.changeDirectory(ftpDir);
+            client.deleteDirectory(caseName);
+        }
+        catch (Exception e) {
+            client.changeDirectory(ftpDir);
+        }
     }
 
-    public ByteArrayOutputStream downloadFile (String filename) throws Exception {
+    public void uploadFile (File f, String dir) throws Exception {
+        relog();
+        InputStream targetStream = new FileInputStream(f);
+        try {
+            client.deleteFile(ftpDir + getMD5(dir) + "/" + f.getName());
+        } catch (Exception ignore) { }
+        client.upload(ftpDir + getMD5(dir) + "/" + f.getName(), targetStream, 0, 0, null);
+    }
+
+    public ByteArrayOutputStream downloadFile (String dir, String filename) throws Exception {
         relog();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        client.download(filename, baos, 0, null);
+        client.download(ftpDir + getMD5(dir) + "/" + filename, baos, 0, null);
         return baos;
+    }
+
+    public void deleteFile (String dir, String filename) throws Exception {
+        relog();
+        client.deleteFile(ftpDir + getMD5(dir) + "/" + filename);
     }
 
 }

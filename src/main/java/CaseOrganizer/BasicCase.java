@@ -55,11 +55,12 @@ public class BasicCase {
     String plannedReplyDate = "";
     String deliveryConfirmation = "";
     String hearing = "";
+    String receivedFrom = "";
     String comments = "";
 
     @XmlJavaTypeAdapter(DateAdapter.class)
     Date dateReceived = Calendar.getInstance().getTime();
-    Integer replyDeadline = 99999;
+    Date replyDeadline = Calendar.getInstance().getTime();
 
     @XmlElementWrapper(name = "links")
     @XmlElement(name = "link")
@@ -228,6 +229,15 @@ public class BasicCase {
     }
 
 
+    public void setReceivedFrom (String receivedFrom) {
+        this.receivedFrom = receivedFrom;
+    }
+
+    public String getReceivedFrom () {
+        return receivedFrom;
+    }
+
+
     public void setComments (String comments) {
         this.comments = comments;
     }
@@ -246,11 +256,11 @@ public class BasicCase {
     }
 
 
-    public void setReplyDeadline (Integer replyDeadline) {
+    public void setReplyDeadline (Date replyDeadline) {
         this.replyDeadline = replyDeadline;
     }
 
-    public Integer getReplyDeadline () {
+    public Date getReplyDeadline () {
         return replyDeadline;
     }
 

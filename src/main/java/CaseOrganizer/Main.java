@@ -59,13 +59,6 @@ public class Main extends Application {
             stage.show();
         }
 
-        /*
-        catch (IOException e) {
-            Dialogs.ErrorDialog("Błąd połączenia z serwerem");
-            System.exit(1);
-        }
-        */
-
         catch (Exception e) {
             Dialogs.ExceptionDialog(e);
             if (conn != null) conn.closeConn();
