@@ -18,6 +18,7 @@ import javafx.util.Callback;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 import app.dialogs.Dialogs;
 import app.ftpconn.FTPConn;
@@ -28,6 +29,7 @@ public class MainController {
 
     private FTPConn conn = null;
     private ObservableList<BasicCase> cases = FXCollections.observableArrayList();
+    private ObservableList<BasicCase> files = FXCollections.observableArrayList();
 
     @FXML private Button searchButton;
     @FXML private TextField searchBar;
@@ -183,12 +185,36 @@ public class MainController {
 
         String s = Dialogs.TextInputDialog("Powiązywanie spraw", "Wprowadź nr pisma powiązywanej sprawy:");
 
+        if (s == null)
+            return;
+
+        if (!s.equals("")) {
+            try {
+                List<String> links = c.getLinks();
+                links.add(s);
+                c.setLinks(links);
+                conn.replaceMetadata(c);
+                Dialogs.InfoDialog("Sprawa powiązana pomyślnie", "Aby wyświetlić wszystkie powiązania, kliknij Pokaż powiązane");
+            } catch (Exception ignore) {
+                Dialogs.InfoDialog("Nie można było powiązać sprawy", "Prawdopodobnie wybrany nr pisma nie został zarejestrowany");
+            }
+        } else {
+            Dialogs.InfoDialog("Nie można było powiązać sprawy", "Po usunięciu spacji nr pisma jest pusty");
+        }
     }
 
     @FXML
     public void showCaseLinks () {
-        // BasicCase c = caseList.getSelectionModel().getSelectedItem();
+        BasicCase c = caseList.getSelectionModel().getSelectedItem();
+        List<String> links = c.getLinks();
+        List<BasicCase> filteredLinks = new ArrayList<BasicCase>();
 
+        for (BasicCase bc : cases)
+            if (links.contains(bc.toString()))
+                filteredLinks.add(bc);
+
+        cases.setAll(filteredLinks);
+        caseList.setItems(cases);
     }
 
 }

@@ -95,7 +95,7 @@ public class FTPConn {
         client.upload("meta.xml", new ByteArrayInputStream(metaFile.toByteArray()), 0, 0, null);
     }
 
-    private void replaceMetadata (BasicCase caseObj) throws Exception {
+    public void replaceMetadata (BasicCase caseObj) throws Exception {
         relog();
         client.changeDirectory(ftpDir + getMD5(caseObj.getLetterNumber()));
         uploadMetadata(caseObj);
