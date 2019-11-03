@@ -1,11 +1,10 @@
 package app.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
@@ -37,10 +36,10 @@ class DateAdapter extends XmlAdapter <String, Date> {
 @XmlAccessorType(XmlAccessType.FIELD)
 public class BasicCase {
 
-    Boolean isPriority = false;
     Boolean isActive = true;
-    Boolean isArchived = false;
+    Boolean isPriority = false;
     Boolean isPending = false;
+    Boolean isArchived = false;
 
     String company = "";
     String from = "";
@@ -76,15 +75,6 @@ public class BasicCase {
     }
 
 
-    public void setIsPriority (Boolean isPriority) {
-        this.isPriority = isPriority;
-    }
-
-    public Boolean getIsPriority () {
-        return isPriority;
-    }
-
-
     public void setIsActive (Boolean isActive) {
         this.isActive = isActive;
     }
@@ -94,12 +84,12 @@ public class BasicCase {
     }
 
 
-    public void setIsArchived (Boolean isArchived) {
-        this.isArchived = isArchived;
+    public void setIsPriority (Boolean isPriority) {
+        this.isPriority = isPriority;
     }
 
-    public Boolean getIsArchived () {
-        return isArchived;
+    public Boolean getIsPriority () {
+        return isPriority;
     }
 
 
@@ -109,6 +99,15 @@ public class BasicCase {
 
     public Boolean getIsPending () {
         return isPending;
+    }
+
+
+    public void setIsArchived (Boolean isArchived) {
+        this.isArchived = isArchived;
+    }
+
+    public Boolean getIsArchived () {
+        return isArchived;
     }
 
 

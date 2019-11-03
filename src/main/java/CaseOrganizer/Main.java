@@ -1,18 +1,14 @@
 package app;
 
-import java.io.IOException;
-
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Control;
 import javafx.stage.Stage;
+import javafx.scene.control.Control;
 import javafx.stage.WindowEvent;
 
-import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.PropertiesConfiguration;
 
 import app.controllers.MainController;
@@ -34,12 +30,22 @@ public class Main extends Application {
                 System.exit(1);
             });
 
-            Configuration config = new PropertiesConfiguration("./config.ini");
+            if (!Dialogs.LoginDialog()) {
+                System.exit(0);
+            }
+
+            PropertiesConfiguration config = new PropertiesConfiguration("./config.ini");
             String host = config.getString("host");
             String user = config.getString("user");
-            String passwd = config.getString("password");
+            String passwd = config.getString("passwd");
 
-            FTPConn conn = new FTPConn(host, user, passwd);
+            try {
+                conn = new FTPConn(host, user, passwd);
+            }
+            catch (Exception e) {
+                Dialogs.WarningDialog("Nie można było nawiązać połączenia z serwerem", "Nieprawidłowe dane logowania");
+                System.exit(1);
+            }
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI.fxml"));
             MainController controller = new MainController(conn);

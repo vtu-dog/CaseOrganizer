@@ -1,30 +1,24 @@
 package app.controllers;
 
-import javafx.fxml.FXML;
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.SimpleListProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
-import javafx.event.ActionEvent;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.TextField;
+import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.util.Callback;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.time.ZoneId;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import app.dialogs.Dialogs;
@@ -333,10 +327,18 @@ public class MainController {
                     c.getDeliveryMethod().toLowerCase()            .contains(query) ||
                     c.getReceivedFrom().toLowerCase()              .contains(query) )
 
-                if (c.getIsPriority() == priorityCheckBox.isSelected() && c.getIsArchived() == archivedCheckBox.isSelected() &&
-                    c.getIsActive() == activeCheckBox.isSelected() && c.getIsPending()  == pendingCheckBox.isSelected())
+                    {
+                        if (activeCheckBox.isSelected() && !priorityCheckBox.isSelected() && !pendingCheckBox.isSelected()) {
+                            if (c.getIsActive())
+                                newCases.add(c);
+                        }
 
-                    newCases.add(c);
+                        else
+                            if (c.getIsActive() == activeCheckBox.isSelected() && c.getIsArchived() == archivedCheckBox.isSelected() &&
+                                c.getIsPriority() == priorityCheckBox.isSelected() && c.getIsPending()  == pendingCheckBox.isSelected())
+
+                                newCases.add(c);
+                    }
             }
 
             cases.setAll(newCases);
@@ -400,15 +402,28 @@ public class MainController {
         if (s == null)
             return;
 
+        List<BasicCase> allCases = new ArrayList<BasicCase>();
+        List<String> dirs = conn.listDirs(null);
+
+        for (String d : dirs) {
+            BasicCase bc = conn.readMetadata(d);
+            allCases.add(bc);
+        }
+
         if (!s.equals("")) {
             try {
-                if (cases.stream().filter(x -> x.toString().equals(s)).collect(Collectors.toList()).size() >= 1) {
+                if (c.getLetterNumber().equals(s))
+                    Dialogs.WarningDialog("Nie można było powiązać sprawy", "Powiązywanie sprawy z sobą samą jest niedozwolone");
+
+                else if (allCases.stream().filter(x -> x.toString().equals(s)).collect(Collectors.toList()).size() >= 1) {
                     List<String> links = c.getLinks();
                     links.add(s);
                     c.setLinks(links);
                     conn.replaceMetadata(c);
                     Dialogs.InfoDialog("Sprawa powiązana pomyślnie", "Aby wyświetlić wszystkie powiązania, kliknij Pokaż powiązane");
-                } else {
+                }
+
+                else {
                     Dialogs.WarningDialog("Nie można było powiązać sprawy", "Prawdopodobnie wybrany nr pisma nie został zarejestrowany");
                 }
             } catch (Exception e) {

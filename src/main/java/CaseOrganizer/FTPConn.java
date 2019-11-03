@@ -1,19 +1,24 @@
 package app.ftpconn;
 
-import it.sauronsoftware.ftp4j.*;
+import it.sauronsoftware.ftp4j.FTPClient;
+import it.sauronsoftware.ftp4j.FTPException;
+import it.sauronsoftware.ftp4j.FTPFile;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.DatatypeConverter;
-import javax.xml.bind.JAXBException;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import java.util.List;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
-import java.io.*;
+import java.util.List;
 
 import app.xml.BasicCase;
 
@@ -29,7 +34,7 @@ public class FTPConn {
 
     private long noop = 20000;
 
-    public FTPConn (String addr, String login, String passwd) throws IOException, FTPIllegalReplyException, FTPException {
+    public FTPConn (String addr, String login, String passwd) throws Exception {
         client = new FTPClient();
         this.addr = addr;
         this.login = login;
