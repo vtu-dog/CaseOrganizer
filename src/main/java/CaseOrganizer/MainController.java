@@ -105,6 +105,10 @@ public class MainController {
                         addFileButton.setDisable(true);
                         downloadAllFilesButton.setDisable(true);
                     }
+
+                    updateCaseInfo(new BasicCase());
+                    emptyFileList();
+
                 } else {
                     deleteCaseButton.setDisable(false);
                     linkCaseButton.setDisable(false);
@@ -133,6 +137,12 @@ public class MainController {
 
     }
 
+
+    private void emptyFileList () {
+        List<String> newFiles = new ArrayList<String>();
+        files.setAll(newFiles);
+        fileList.setItems(files);
+    }
 
 
     private void updateFileList (BasicCase caseObj) {
