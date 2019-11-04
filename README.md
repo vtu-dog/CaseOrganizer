@@ -39,5 +39,5 @@ Should the program enter an unrecoverable state (e.g. internet access was lost),
 The project was tested using Java 8u221 on macOS 10.15 Catalina and Manjaro Linux 18.1.2 (GNOME flavour).
 
 ## Contributing
-- Dawid Gałka ([GitHub link](https://github.com/efosoner))
-- Wojciech Jarząbek ([GitHub link](https://github.com/vyatu))
+- [Dawid Gałka](https://github.com/efosoner)
+- [Wojciech Jarząbek](https://github.com/vyatu)
