@@ -41,6 +41,7 @@ public class BasicCase {
     Boolean isPending = false;
     Boolean isArchived = false;
 
+    String friendlyName = "";
     String company = "";
     String from = "";
     String concerning = "";
@@ -71,7 +72,13 @@ public class BasicCase {
 
     @Override
     public String toString () {
-        return (this.letterNumber);
+        String s = this.letterNumber;
+
+        if (friendlyName.equals(""))
+            return this.letterNumber;
+
+        else
+            return this.letterNumber + " (" + this.friendlyName + ")";
     }
 
 
@@ -108,6 +115,15 @@ public class BasicCase {
 
     public Boolean getIsArchived () {
         return isArchived;
+    }
+
+
+    public void setFriendlyName (String friendlyName) {
+        this.friendlyName = friendlyName;
+    }
+
+    public String getFriendlyName () {
+        return friendlyName;
     }
 
 

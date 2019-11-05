@@ -57,6 +57,7 @@ public class MainController {
     @FXML private CheckBox activeCaseCheckBox;
     @FXML private CheckBox pendingCaseCheckBox;
 
+    @FXML private TextField friendlyName;
     @FXML private TextField letterNumber;
     @FXML private TextField company;
     @FXML private TextField from;
@@ -166,6 +167,7 @@ public class MainController {
         pendingCaseCheckBox.setSelected(caseObj.getIsPending());
         archivedCaseCheckBox.setSelected(caseObj.getIsArchived());
 
+        friendlyName.setText(caseObj.getFriendlyName());
         letterNumber.setText(caseObj.getLetterNumber());
         company.setText(caseObj.getCompany());
         from.setText(caseObj.getFrom());
@@ -195,6 +197,7 @@ public class MainController {
         c.setIsPending(pendingCaseCheckBox.isSelected());
         c.setIsArchived(archivedCaseCheckBox.isSelected());
 
+        c.setFriendlyName(friendlyName.getText());
         c.setLetterNumber(letterNumber.getText());
         c.setCompany(company.getText());
         c.setFrom(from.getText());
@@ -215,7 +218,7 @@ public class MainController {
 
         try {
             conn.replaceMetadata(c);
-            Dialogs.InfoDialog("Dane sprawy zapisane pomyślnie", null);
+            Dialogs.InfoDialog("Dane sprawy zapisane pomyślnie", "Nie zapomnij o odświeżeniu listy poprzez ponowne kliknięcie przycisku Szukaj");
         }
         catch (Exception e) {
             Dialogs.WarningDialog("Nie można było zapisać danych sprawy", "Prawdopodobnie została ona usunięta");
@@ -327,7 +330,8 @@ public class MainController {
             for (String d : dirs) {
                 BasicCase c = conn.readMetadata(d);
 
-                if (c.getLetterNumber().toLowerCase()              .contains(query) ||
+                if (c.getFriendlyName().toLowerCase()              .contains(query) ||
+                    c.getLetterNumber().toLowerCase()              .contains(query) ||
                     c.getCaseNumber().toLowerCase()                .contains(query) ||
                     c.getCompany().toLowerCase()                   .contains(query) ||
                     c.getFrom().toLowerCase()                      .contains(query) ||
@@ -353,6 +357,10 @@ public class MainController {
 
             cases.setAll(newCases);
             caseList.setItems(cases);
+
+            if (newCases.size() == 0) {
+                Dialogs.InfoDialog("Nie znaleziono spraw o zadanych parametrach", "Upewnij się, że do wyszukiwania dobrano odpowiednie tagi");
+            }
         }
         catch (Exception e) {
             Dialogs.WarningDialog("Błąd wyszukiwania", "Utracono połączenie z serwerem");
@@ -387,7 +395,7 @@ public class MainController {
         if (c == null)
             return;
 
-        Boolean confirm = Dialogs.ConfirmationDialog("Zamierzasz usunąć sprawę o numerze pisma " + c.getLetterNumber());
+        Boolean confirm = Dialogs.ConfirmationDialog("Zamierzasz usunąć sprawę " + c.toString());
 
         if (confirm) {
             try {

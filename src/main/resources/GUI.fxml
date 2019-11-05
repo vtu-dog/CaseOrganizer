@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<SplitPane dividerPositions="0.28281117696867064" nodeOrientation="LEFT_TO_RIGHT" prefHeight="798.0" prefWidth="1234.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<SplitPane dividerPositions="0.28281117696867064" nodeOrientation="LEFT_TO_RIGHT" prefHeight="740.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
   <items>
     <AnchorPane maxWidth="330.0" minHeight="0.0" minWidth="330.0" prefHeight="160.0" prefWidth="100.0">
          <children>
@@ -101,23 +101,33 @@
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </VBox.margin>
                               </AnchorPane>
-                            <AnchorPane maxWidth="544.0" minWidth="544.0" prefHeight="160.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
+                            <AnchorPane maxWidth="530.0" minWidth="530.0" prefHeight="160.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
                                  <children>
                                     <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <children>
                                           <HBox alignment="TOP_CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="35.0" prefWidth="544.0" spacing="30.0">
-                                             <padding>
-                                                <Insets top="7.0" />
-                                             </padding>
                                              <children>
                                                 <CheckBox fx:id="activeCaseCheckBox" mnemonicParsing="false" onAction="#setIsCaseActive" text="Aktywne" HBox.hgrow="ALWAYS" />
                                                 <CheckBox fx:id="priorityCaseCheckBox" mnemonicParsing="false" onAction="#setIsCasePriority" text="Priorytetowe" HBox.hgrow="ALWAYS" />
                                                 <CheckBox fx:id="pendingCaseCheckBox" mnemonicParsing="false" onAction="#setIsCasePending" text="Oczekujące" HBox.hgrow="ALWAYS" />
                                                 <CheckBox fx:id="archivedCaseCheckBox" mnemonicParsing="false" onAction="#setIsCaseArchived" text="Zarchiwizowane" HBox.hgrow="ALWAYS" />
                                              </children>
+                                             <VBox.margin>
+                                                <Insets top="2.0" />
+                                             </VBox.margin>
                                           </HBox>
                                           <VBox prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
                                              <children>
+                                                <HBox nodeOrientation="LEFT_TO_RIGHT" prefHeight="100.0">
+                                                   <children>
+                                                      <Label minHeight="35.0" nodeOrientation="LEFT_TO_RIGHT" prefWidth="277.0" text="Nazwa własna" HBox.hgrow="ALWAYS">
+                                                         <padding>
+                                                            <Insets left="5.0" />
+                                                         </padding>
+                                                      </Label>
+                                                      <TextField fx:id="friendlyName" minHeight="35.0" minWidth="269.0" nodeOrientation="LEFT_TO_RIGHT" />
+                                                   </children>
+                                                </HBox>
                                                 <HBox nodeOrientation="LEFT_TO_RIGHT" prefHeight="100.0" VBox.vgrow="ALWAYS">
                                                    <children>
                                                       <Label minHeight="35.0" nodeOrientation="LEFT_TO_RIGHT" prefWidth="277.0" text="Numer pisma" HBox.hgrow="ALWAYS">
@@ -125,7 +135,7 @@
                                                             <Insets left="5.0" />
                                                          </padding>
                                                       </Label>
-                                                      <TextField fx:id="letterNumber" minHeight="35.0" minWidth="277.0" nodeOrientation="LEFT_TO_RIGHT" />
+                                                      <TextField fx:id="letterNumber" minHeight="35.0" minWidth="269.0" nodeOrientation="LEFT_TO_RIGHT" />
                                                    </children>
                                                 </HBox>
                                                 <HBox prefHeight="100.0" VBox.vgrow="ALWAYS">
@@ -135,7 +145,7 @@
                                                             <Insets left="5.0" />
                                                          </padding>
                                                       </Label>
-                                                      <DatePicker fx:id="dateReceived" minHeight="35.0" minWidth="277.0" HBox.hgrow="ALWAYS" />
+                                                      <DatePicker fx:id="dateReceived" minHeight="35.0" minWidth="269.0" HBox.hgrow="ALWAYS" />
                                                    </children>
                                                 </HBox>
                                                 <HBox prefHeight="100.0" VBox.vgrow="ALWAYS">
@@ -145,7 +155,7 @@
                                                             <Insets left="5.0" />
                                                          </padding>
                                                       </Label>
-                                                      <DatePicker fx:id="replyDeadline" minHeight="35.0" minWidth="277.0" />
+                                                      <DatePicker fx:id="replyDeadline" minHeight="35.0" minWidth="269.0" />
                                                    </children>
                                                 </HBox>
                                                 <HBox prefHeight="100.0" VBox.vgrow="ALWAYS">
@@ -155,7 +165,7 @@
                                                             <Insets left="5.0" />
                                                          </padding>
                                                       </Label>
-                                                      <TextField fx:id="company" minHeight="35.0" minWidth="277.0" />
+                                                      <TextField fx:id="company" minHeight="35.0" minWidth="269.0" />
                                                    </children>
                                                 </HBox>
                                                 <HBox prefHeight="100.0" VBox.vgrow="ALWAYS">
@@ -165,7 +175,7 @@
                                                             <Insets left="5.0" />
                                                          </padding>
                                                       </Label>
-                                                      <TextField fx:id="from" minHeight="35.0" minWidth="277.0" />
+                                                      <TextField fx:id="from" minHeight="35.0" minWidth="269.0" />
                                                    </children>
                                                 </HBox>
                                                 <HBox prefHeight="100.0" VBox.vgrow="ALWAYS">
@@ -175,7 +185,7 @@
                                                             <Insets left="5.0" />
                                                          </padding>
                                                       </Label>
-                                                      <TextField fx:id="concerning" minHeight="35.0" minWidth="277.0" />
+                                                      <TextField fx:id="concerning" minHeight="35.0" minWidth="269.0" />
                                                    </children>
                                                 </HBox>
                                                 <HBox prefHeight="100.0" VBox.vgrow="ALWAYS">
@@ -185,7 +195,7 @@
                                                             <Insets left="5.0" />
                                                          </padding>
                                                       </Label>
-                                                      <TextField fx:id="inspectionPeriod" minHeight="35.0" minWidth="277.0" />
+                                                      <TextField fx:id="inspectionPeriod" minHeight="35.0" minWidth="269.0" />
                                                    </children>
                                                 </HBox>
                                                 <HBox prefHeight="100.0" VBox.vgrow="ALWAYS">
@@ -195,7 +205,7 @@
                                                             <Insets left="5.0" />
                                                          </padding>
                                                       </Label>
-                                                      <TextField fx:id="plannedEndDate" minHeight="35.0" minWidth="277.0" />
+                                                      <TextField fx:id="plannedEndDate" minHeight="35.0" minWidth="269.0" />
                                                    </children>
                                                 </HBox>
                                                 <HBox prefHeight="100.0">
@@ -205,7 +215,7 @@
                                                             <Insets left="5.0" />
                                                          </padding>
                                                       </Label>
-                                                      <TextField fx:id="caseNumber" minHeight="35.0" minWidth="277.0" />
+                                                      <TextField fx:id="caseNumber" minHeight="35.0" minWidth="269.0" />
                                                    </children>
                                                 </HBox>
                                                 <HBox prefHeight="100.0" VBox.vgrow="ALWAYS">
@@ -215,7 +225,7 @@
                                                             <Insets left="5.0" />
                                                          </padding>
                                                       </Label>
-                                                      <TextField fx:id="correspondenceDescription" minHeight="35.0" minWidth="277.0" />
+                                                      <TextField fx:id="correspondenceDescription" minHeight="35.0" minWidth="269.0" />
                                                    </children>
                                                 </HBox>
                                                 <HBox prefHeight="100.0" VBox.vgrow="ALWAYS">
@@ -225,7 +235,7 @@
                                                             <Insets left="5.0" />
                                                          </padding>
                                                       </Label>
-                                                      <TextField fx:id="remaining" minHeight="35.0" minWidth="277.0" />
+                                                      <TextField fx:id="remaining" minHeight="35.0" minWidth="269.0" />
                                                    </children>
                                                 </HBox>
                                                 <HBox prefHeight="100.0" VBox.vgrow="ALWAYS">
@@ -235,7 +245,7 @@
                                                             <Insets left="5.0" />
                                                          </padding>
                                                       </Label>
-                                                      <TextField fx:id="deliveryMethod" minHeight="35.0" minWidth="277.0" />
+                                                      <TextField fx:id="deliveryMethod" minHeight="35.0" minWidth="269.0" />
                                                    </children>
                                                 </HBox>
                                                 <HBox prefHeight="100.0" VBox.vgrow="ALWAYS">
@@ -245,7 +255,7 @@
                                                             <Insets left="5.0" />
                                                          </padding>
                                                       </Label>
-                                                      <TextField fx:id="plannedReplyDate" minHeight="35.0" minWidth="277.0" />
+                                                      <TextField fx:id="plannedReplyDate" minHeight="35.0" minWidth="269.0" />
                                                    </children>
                                                 </HBox>
                                                 <HBox prefHeight="100.0" VBox.vgrow="ALWAYS">
@@ -255,7 +265,7 @@
                                                             <Insets left="5.0" />
                                                          </padding>
                                                       </Label>
-                                                      <TextField fx:id="deliveryConfirmation" minHeight="35.0" minWidth="277.0" />
+                                                      <TextField fx:id="deliveryConfirmation" minHeight="35.0" minWidth="269.0" />
                                                    </children>
                                                 </HBox>
                                                 <HBox prefHeight="100.0" VBox.vgrow="ALWAYS">
@@ -265,7 +275,7 @@
                                                             <Insets left="5.0" />
                                                          </padding>
                                                       </Label>
-                                                      <TextField fx:id="receivedFrom" minHeight="35.0" minWidth="277.0" />
+                                                      <TextField fx:id="receivedFrom" minHeight="35.0" minWidth="269.0" />
                                                    </children>
                                                 </HBox>
                                                 <HBox prefHeight="100.0" VBox.vgrow="ALWAYS">
@@ -275,7 +285,7 @@
                                                             <Insets left="5.0" />
                                                          </padding>
                                                       </Label>
-                                                      <TextField fx:id="hearing" minHeight="35.0" minWidth="277.0" />
+                                                      <TextField fx:id="hearing" minHeight="35.0" minWidth="269.0" />
                                                    </children>
                                                 </HBox>
                                                 <HBox prefHeight="100.0">
@@ -285,7 +295,7 @@
                                                             <Insets left="5.0" />
                                                          </padding>
                                                       </Label>
-                                                      <TextField fx:id="comments" minHeight="35.0" minWidth="277.0" />
+                                                      <TextField fx:id="comments" alignment="BOTTOM_LEFT" minHeight="35.0" minWidth="269.0" />
                                                    </children>
                                                 </HBox>
                                                 <HBox prefHeight="35.0" prefWidth="544.0" VBox.vgrow="ALWAYS">
@@ -317,7 +327,7 @@
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </VBox.margin>
                               </AnchorPane>
-                              <AnchorPane maxWidth="340.0" minHeight="0.0" minWidth="340.0" prefHeight="160.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
+                              <AnchorPane maxWidth="320.0" minHeight="0.0" minWidth="320.0" prefHeight="160.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
                                  <children>
                                     <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <children>
