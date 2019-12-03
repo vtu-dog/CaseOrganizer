@@ -47,6 +47,9 @@ public class MainController {
     @FXML private Button linkCaseButton;
     @FXML private Button showCaseLinksButton;
 
+    @FXML private Button saveCaseButton;
+    @FXML private Button restoreDefaultsButton;
+
     @FXML private Button addFileButton;
     @FXML private Button deleteFileButton;
     @FXML private Button downloadFileButton;
@@ -87,6 +90,9 @@ public class MainController {
         linkCaseButton.setDisable(true);
         showCaseLinksButton.setDisable(true);
 
+        saveCaseButton.setDisable(true);
+        restoreDefaultsButton.setDisable(true);
+
         addFileButton.setDisable(true);
         deleteFileButton.setDisable(true);
         downloadFileButton.setDisable(true);
@@ -102,6 +108,9 @@ public class MainController {
                     linkCaseButton.setDisable(true);
                     showCaseLinksButton.setDisable(true);
 
+                    saveCaseButton.setDisable(true);
+                    restoreDefaultsButton.setDisable(true);
+
                     if (fileList.getSelectionModel().getSelectedItem() == null) {
                         addFileButton.setDisable(true);
                         downloadAllFilesButton.setDisable(true);
@@ -114,6 +123,8 @@ public class MainController {
                     deleteCaseButton.setDisable(false);
                     linkCaseButton.setDisable(false);
                     showCaseLinksButton.setDisable(false);
+                    saveCaseButton.setDisable(false);
+                    restoreDefaultsButton.setDisable(false);
                     addFileButton.setDisable(false);
                     updateFileList(newValue);
                     updateCaseInfo(newValue);
@@ -221,8 +232,12 @@ public class MainController {
             Dialogs.InfoDialog("Dane sprawy zapisane pomyślnie", "Nie zapomnij o odświeżeniu listy poprzez ponowne kliknięcie przycisku Szukaj");
         }
         catch (Exception e) {
-            Dialogs.WarningDialog("Nie można było zapisać danych sprawy", "Prawdopodobnie została ona usunięta");
-            try { conn.noop(); } catch (Exception ignore) { throw e; }
+            try {
+                conn.noop();
+                Dialogs.WarningDialog("Nie można było zapisać danych sprawy", "Prawdopodobnie została ona usunięta", e);
+            } catch (Exception ignore) {
+                Dialogs.NoopFailedDialog();
+            }
         }
     }
 
@@ -363,8 +378,12 @@ public class MainController {
             }
         }
         catch (Exception e) {
-            Dialogs.WarningDialog("Błąd wyszukiwania", "Utracono połączenie z serwerem");
-            try { conn.noop(); } catch (Exception ignore) { throw e; }
+            try {
+                conn.noop();
+                Dialogs.WarningDialog("Błąd wyszukiwania", "Utracono połączenie z serwerem", e);
+            } catch (Exception ignore) {
+                Dialogs.NoopFailedDialog();
+            }
         }
     }
 
@@ -380,11 +399,15 @@ public class MainController {
                 conn.createCase(s);
                 Dialogs.InfoDialog("Sprawa utworzona pomyślnie", "Nie zapomnij o odświeżeniu listy poprzez ponowne kliknięcie przycisku Szukaj");
             } catch (Exception e) {
-                Dialogs.WarningDialog("Nieprawidłowy nr pisma", "Nr pisma nie może pojawiać się w więcej niż jednej sprawie");
-                try { conn.noop(); } catch (Exception ignore) { throw e; }
+                try {
+                    conn.noop();
+                    Dialogs.WarningDialog("Nieprawidłowy nr pisma", "Nr pisma nie może pojawiać się w więcej niż jednej sprawie", e);
+                } catch (Exception ignore) {
+                    Dialogs.NoopFailedDialog();
+                }
             }
         } else {
-            Dialogs.WarningDialog("Nieprawidłowy nr pisma", "Po usunięciu spacji nr pisma jest pusty");
+            Dialogs.WarningDialog("Nieprawidłowy nr pisma", "Po usunięciu spacji nr pisma jest pusty", null);
         }
     }
 
@@ -402,8 +425,12 @@ public class MainController {
                 conn.deleteCase(c);
                 Dialogs.InfoDialog("Sprawa usunięta pomyślnie", "Nie zapomnij o odświeżeniu listy poprzez ponowne kliknięcie przycisku Szukaj");
             } catch (Exception e) {
-                Dialogs.WarningDialog("Nie można było usunąć sprawy", "Prawdopodobnie została ona już usunięta - odśwież listę przyciskiem Szukaj");
-                try { conn.noop(); } catch (Exception ignore) { throw e; }
+                try {
+                    conn.noop();
+                    Dialogs.WarningDialog("Nie można było usunąć sprawy", "Prawdopodobnie została ona już usunięta - odśwież listę przyciskiem Szukaj", e);
+                } catch (Exception ignore) {
+                    Dialogs.NoopFailedDialog();
+                }
             }
         }
     }
@@ -431,7 +458,7 @@ public class MainController {
         if (!s.equals("")) {
             try {
                 if (c.getLetterNumber().equals(s))
-                    Dialogs.WarningDialog("Nie można było powiązać sprawy", "Powiązywanie sprawy z sobą samą jest niedozwolone");
+                    Dialogs.WarningDialog("Nie można było powiązać sprawy", "Powiązywanie sprawy z sobą samą jest niedozwolone", null);
 
                 else if (allCases.stream().filter(x -> x.toString().equals(s)).collect(Collectors.toList()).size() >= 1) {
                     List<String> links = c.getLinks();
@@ -442,14 +469,18 @@ public class MainController {
                 }
 
                 else {
-                    Dialogs.WarningDialog("Nie można było powiązać sprawy", "Prawdopodobnie wybrany nr pisma nie został zarejestrowany");
+                    Dialogs.WarningDialog("Nie można było powiązać sprawy", "Wybrany nr pisma nie został zarejestrowany", null);
                 }
             } catch (Exception e) {
-                Dialogs.WarningDialog("Nie można było powiązać sprawy", "Prawdopodobnie wybrany nr pisma nie został zarejestrowany");
-                try { conn.noop(); } catch (Exception ignore) { throw e; }
+                try {
+                    conn.noop();
+                    Dialogs.WarningDialog("Nie można było powiązać sprawy", "Prawdopodobnie wybrany nr pisma nie został zarejestrowany", e);
+                } catch (Exception ignore) {
+                    Dialogs.NoopFailedDialog();
+                }
             }
         } else {
-            Dialogs.WarningDialog("Nie można było powiązać sprawy", "Po usunięciu spacji nr pisma jest pusty");
+            Dialogs.WarningDialog("Nie można było powiązać sprawy", "Po usunięciu spacji nr pisma jest pusty", null);
         }
     }
 
@@ -488,8 +519,12 @@ public class MainController {
             updateFileList(c);
             Dialogs.InfoDialog("Pomyślnie dodano plik", null);
         } catch (Exception e) {
-            Dialogs.WarningDialog("Nie można było dodać pliku", null);
-            try { conn.noop(); } catch (Exception ignore) { throw e; }
+            try {
+                conn.noop();
+                Dialogs.WarningDialog("Nie można było dodać pliku", null, e);
+            } catch (Exception ignore) {
+                Dialogs.NoopFailedDialog();
+            }
         }
     }
 
@@ -509,8 +544,12 @@ public class MainController {
                 updateFileList(c);
                 Dialogs.InfoDialog("Plik usunięty pomyślnie", null);
             } catch (Exception e) {
-                Dialogs.WarningDialog("Nie można było usunąć pliku", "Prawdopodobnie został on już usunięty");
-                try { conn.noop(); } catch (Exception ignore) { throw e; }
+                try {
+                    conn.noop();
+                    Dialogs.WarningDialog("Nie można było usunąć pliku", "Prawdopodobnie został on już usunięty", e);
+                } catch (Exception ignore) {
+                    Dialogs.NoopFailedDialog();
+                }
             }
         }
     }
@@ -537,8 +576,12 @@ public class MainController {
             Dialogs.InfoDialog("Plik pobrany pomyślnie", null);
         }
         catch (Exception e) {
-            Dialogs.WarningDialog("Nie można było pobrać pliku", "Prawdopodobnie został on usunięty");
-            try { conn.noop(); } catch (Exception ignore) { throw e; }
+            try {
+                conn.noop();
+                Dialogs.WarningDialog("Nie można było pobrać pliku", "Prawdopodobnie został on usunięty", e);
+            } catch (Exception ignore) {
+                Dialogs.NoopFailedDialog();
+            }
         }
 
     }
@@ -566,8 +609,12 @@ public class MainController {
             Dialogs.InfoDialog("Pliki pobrano pomyślnie", null);
         }
         catch (Exception e) {
-            Dialogs.WarningDialog("Nie można było pobrać plików", null);
-            try { conn.noop(); } catch (Exception ignore) { throw e; }
+            try {
+                conn.noop();
+                Dialogs.WarningDialog("Nie można było pobrać plików", null, e);
+            } catch (Exception ignore) {
+                Dialogs.NoopFailedDialog();
+            }
         }
     }
 

@@ -54,6 +54,7 @@ public class Dialogs {
         alert.getDialogPane().setContent(expContent);
 
         alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+        alert.setResizable(false);
         alert.showAndWait();
     }
 
@@ -63,15 +64,32 @@ public class Dialogs {
         alert.setHeaderText(header);
         alert.setContentText(msg);
         alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+        alert.setResizable(false);
         alert.showAndWait();
     }
 
-    public static void WarningDialog (String msg1, String msg2) {
+    public static void WarningDialog (String msg1, String msg2, Exception ex) {
         Alert alert = new Alert(AlertType.WARNING);
         alert.setTitle("Ostrzeżenie");
         alert.setHeaderText(msg1);
         alert.setContentText(msg2);
         alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+
+        if (ex != null) {
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            ex.printStackTrace(pw);
+            String exceptionText = sw.toString();
+
+            TextArea textArea = new TextArea(exceptionText);
+            GridPane expContent = new GridPane();
+            expContent.setMaxWidth(Double.MAX_VALUE);
+            expContent.add(textArea, 0, 0);
+
+            alert.getDialogPane().setExpandableContent(expContent);
+        }
+
+        alert.setResizable(false);
         alert.showAndWait();
     }
 
@@ -81,6 +99,7 @@ public class Dialogs {
         alert.setHeaderText(msg1);
         alert.setContentText(msg2);
         alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+        alert.setResizable(false);
         alert.showAndWait();
     }
 
@@ -90,6 +109,7 @@ public class Dialogs {
         alert.setHeaderText(msg);
         alert.setContentText("Czy na pewno chcesz to zrobić?");
         alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+        alert.setResizable(false);
 
         Optional<ButtonType> result = alert.showAndWait();
         return (result.get() == ButtonType.OK);
@@ -101,6 +121,7 @@ public class Dialogs {
         alert.setHeaderText(msg1);
         alert.setContentText(msg2);
         alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+        alert.setResizable(false);
 
         Optional<String> result = alert.showAndWait();
 
@@ -110,6 +131,17 @@ public class Dialogs {
         else {
             return null;
         }
+    }
+
+    public static void NoopFailedDialog () {
+        Alert alert = new Alert(AlertType.WARNING);
+        alert.setTitle("Ostrzeżenie");
+        alert.setHeaderText("Połączenie z serwerem zostało zerwane");
+        alert.setContentText("Program wyłączy się, by zapobiec utracie danych");
+        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+        alert.setResizable(false);
+        alert.showAndWait();
+        System.exit(0);
     }
 
     public static boolean LoginDialog () throws Exception {
@@ -134,20 +166,32 @@ public class Dialogs {
             File f = new File("./config.ini");
             f.createNewFile();
             config = new PropertiesConfiguration("./config.ini");
-            config.setProperty("host", "adres serwera");
-            config.setProperty("user", "nazwa użytkownika");
-            config.setProperty("passwd", "hasło");
+            config.setProperty("host", "");
+            config.setProperty("user", "");
+            config.setProperty("passwd", "");
             config.save();
         }
 
         TextField host = new TextField();
-        host.setText(config.getString("host"));
+        String hostText = config.getString("host");
+        if (hostText.equals(""))
+            host.setPromptText("adres serwera");
+        else
+            host.setText(hostText);
 
         TextField user = new TextField();
-        user.setText(config.getString("user"));
+        String userText = config.getString("user");
+        if (userText.equals(""))
+            user.setPromptText("nazwa użytkownika");
+        else
+            user.setText(userText);
 
         PasswordField passwd = new PasswordField();
-        passwd.setText(config.getString("passwd"));
+        String passwdText = config.getString("passwd");
+        if (passwdText.equals(""))
+            passwd.setPromptText("hasło");
+        else
+            passwd.setText(passwdText);
 
         grid.add(new Label("Adres serwera:"), 0, 0);
         grid.add(host, 1, 0);
@@ -158,6 +202,7 @@ public class Dialogs {
 
         alert.getDialogPane().setContent(grid);
         alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+        alert.setResizable(false);
 
         Optional<ButtonType> result = alert.showAndWait();
         alert.close();

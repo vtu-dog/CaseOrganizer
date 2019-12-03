@@ -27,7 +27,7 @@ public class Main extends Application {
             Thread.currentThread().setUncaughtExceptionHandler((thread, throwable) -> {
                 Dialogs.ExceptionDialog(new Exception(throwable));
                 if (conn != null) conn.closeConn();
-                System.exit(1);
+                System.exit(0);
             });
 
             if (!Dialogs.LoginDialog()) {
@@ -43,8 +43,8 @@ public class Main extends Application {
                 conn = new FTPConn(host, user, passwd);
             }
             catch (Exception e) {
-                Dialogs.WarningDialog("Nie można było nawiązać połączenia z serwerem", "Nieprawidłowe dane logowania");
-                System.exit(1);
+                Dialogs.WarningDialog("Nie można było nawiązać połączenia z serwerem", "Dane logowania są nieprawidłowe, lub serwer nie odpowiada", null);
+                System.exit(0);
             }
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI.fxml"));
@@ -68,7 +68,7 @@ public class Main extends Application {
         catch (Exception e) {
             Dialogs.ExceptionDialog(e);
             if (conn != null) conn.closeConn();
-            System.exit(1);
+            System.exit(0);
         }
 
     }
