@@ -8,6 +8,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.collections.FXCollections;
@@ -18,7 +19,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
 import app.dialogs.Dialogs;
@@ -39,6 +45,9 @@ public class MainController {
     @FXML private CheckBox archivedCheckBox;
     @FXML private CheckBox activeCheckBox;
     @FXML private CheckBox pendingCheckBox;
+
+    @FXML private CheckBox deadlineCheckBox;
+    @FXML private TextField deadlineTime;
 
     @FXML private ListView<BasicCase> caseList;
     @FXML private ListView<String> fileList;
@@ -100,6 +109,19 @@ public class MainController {
 
         letterNumber.setEditable(false);
 
+        UnaryOperator<TextFormatter.Change> filter = change -> {
+            String text = change.getText();
+            if (text.matches("[0-9]*")) {
+                return change;
+            } else {
+                return null;
+            }
+        };
+
+        TextFormatter<String> textFormatter = new TextFormatter<>(filter);
+        deadlineTime.setTextFormatter(textFormatter);
+        deadlineTime.setOnMouseClicked(e -> deadlineTime.selectAll());
+
         caseList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<BasicCase>() {
             @Override
             public void changed(ObservableValue<? extends BasicCase> observable, BasicCase oldValue, BasicCase newValue) {
@@ -118,6 +140,14 @@ public class MainController {
 
                     updateCaseInfo(new BasicCase());
                     emptyFileList();
+
+                    dateReceived.setValue(null);
+                    replyDeadline.setValue(null);
+
+                    activeCaseCheckBox.setSelected(false);
+                    priorityCaseCheckBox.setSelected(false);
+                    archivedCaseCheckBox.setSelected(false);
+                    pendingCaseCheckBox.setSelected(false);
 
                 } else {
                     deleteCaseButton.setDisable(false);
@@ -334,40 +364,112 @@ public class MainController {
     }
 
 
+    private static long getDifferenceDays (Date d1, Date d2) {
+        long diff = d2.getTime() - d1.getTime();
+        return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+    }
+
+    private boolean checkTimeDifference (BasicCase c) {
+        Date caseDate = c.getReplyDeadline();
+        Date currentDate = Calendar.getInstance().getTime();
+
+        String dtime = deadlineTime.getText();
+        int days;
+
+        if (dtime.equals(""))
+            days = 3;
+        else
+            days = Integer.parseInt(dtime);
+
+        return getDifferenceDays(currentDate, caseDate) < days;
+    }
+
+    private boolean checkNotContains (BasicCase c, List<BasicCase> newCases) {
+        String cn = c.getLetterNumber();
+
+        for (BasicCase bc : newCases) {
+            if (bc.getLetterNumber().equals(cn)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
 
     @FXML
     public void search () throws Exception {
         try {
-            String query = searchBar.getText().trim().toLowerCase();
+            boolean listAll = false;
+
             List<String> dirs = conn.listDirs(null);
             List<BasicCase> newCases = new ArrayList<BasicCase>();
+            String queriesStr = searchBar.getText().trim().toLowerCase();
+
+            if (queriesStr.equals(""))
+                listAll = true;
+
+            List<String> queries = Arrays.asList(queriesStr.split(","));
 
             for (String d : dirs) {
                 BasicCase c = conn.readMetadata(d);
 
-                if (c.getFriendlyName().toLowerCase()              .contains(query) ||
-                    c.getLetterNumber().toLowerCase()              .contains(query) ||
-                    c.getCaseNumber().toLowerCase()                .contains(query) ||
-                    c.getCompany().toLowerCase()                   .contains(query) ||
-                    c.getFrom().toLowerCase()                      .contains(query) ||
-                    c.getConcerning().toLowerCase()                .contains(query) ||
-                    c.getComments().toLowerCase()                  .contains(query) ||
-                    c.getCorrespondenceDescription().toLowerCase() .contains(query) ||
-                    c.getDeliveryMethod().toLowerCase()            .contains(query) ||
-                    c.getReceivedFrom().toLowerCase()              .contains(query) )
+                boolean matchesAll = true;
 
-                    {
-                        if (activeCheckBox.isSelected() && !priorityCheckBox.isSelected() && !pendingCheckBox.isSelected()) {
-                            if (c.getIsActive())
-                                newCases.add(c);
+                for (String q : queries) {
+                    String query = q.trim();
+
+                    if (query.equals("") && listAll == false)
+                        continue;
+
+                    if (c.getFriendlyName().toLowerCase()              .contains(query) ||
+                        c.getLetterNumber().toLowerCase()              .contains(query) ||
+                        c.getCompany().toLowerCase()                   .contains(query) ||
+                        c.getFrom().toLowerCase()                      .contains(query) ||
+                        c.getConcerning().toLowerCase()                .contains(query) ||
+                        c.getInspectionPeriod().toLowerCase()          .contains(query) ||
+                        c.getPlannedEndDate().toLowerCase()            .contains(query) ||
+                        c.getCaseNumber().toLowerCase()                .contains(query) ||
+                        c.getCorrespondenceDescription().toLowerCase() .contains(query) ||
+                        c.getRemaining().toLowerCase()                 .contains(query) ||
+                        c.getDeliveryMethod().toLowerCase()            .contains(query) ||
+                        c.getPlannedReplyDate().toLowerCase()          .contains(query) ||
+                        c.getDeliveryConfirmation().toLowerCase()      .contains(query) ||
+                        c.getReceivedFrom().toLowerCase()              .contains(query) ||
+                        c.getHearing().toLowerCase()                   .contains(query) ||
+                        c.getComments().toLowerCase()                  .contains(query) )
+
+                        {
+                            if (activeCheckBox.isSelected() &&!priorityCheckBox.isSelected() && !pendingCheckBox.isSelected()) {
+
+                                if (c.getIsActive()) {
+                                    if (deadlineCheckBox.isSelected() && checkTimeDifference(c) == false)
+                                        matchesAll = false;
+
+                                    if (checkNotContains(c, newCases) == false)
+                                        matchesAll = false;
+
+                                }
+                            }
+
+                            else if (c.getIsActive() == activeCheckBox.isSelected() && c.getIsArchived() == archivedCheckBox.isSelected() &&
+                                c.getIsPriority() == priorityCheckBox.isSelected() && c.getIsPending()  == pendingCheckBox.isSelected()) {
+
+                                if (deadlineCheckBox.isSelected() && checkTimeDifference(c) == false)
+                                    matchesAll = false;
+
+                                if (checkNotContains(c, newCases) == false)
+                                    matchesAll = false;
+                            }
                         }
 
-                        else
-                            if (c.getIsActive() == activeCheckBox.isSelected() && c.getIsArchived() == archivedCheckBox.isSelected() &&
-                                c.getIsPriority() == priorityCheckBox.isSelected() && c.getIsPending()  == pendingCheckBox.isSelected())
+                        else {
+                            matchesAll = false;
+                            break;
+                        }
+                }
 
-                                newCases.add(c);
-                    }
+                if (matchesAll) newCases.add(c);
             }
 
             cases.setAll(newCases);
@@ -380,7 +482,7 @@ public class MainController {
         catch (Exception e) {
             try {
                 conn.noop();
-                Dialogs.WarningDialog("Błąd wyszukiwania", "Utracono połączenie z serwerem", e);
+                Dialogs.WarningDialog("Błąd wyszukiwania", "Prawdopodobnie utracono połączenie z serwerem", e);
             } catch (Exception ignore) {
                 Dialogs.NoopFailedDialog();
             }
@@ -460,7 +562,7 @@ public class MainController {
                 if (c.getLetterNumber().equals(s))
                     Dialogs.WarningDialog("Nie można było powiązać sprawy", "Powiązywanie sprawy z sobą samą jest niedozwolone", null);
 
-                else if (allCases.stream().filter(x -> x.toString().equals(s)).collect(Collectors.toList()).size() >= 1) {
+                else if (allCases.stream().filter(x -> x.getLetterNumber().equals(s)).collect(Collectors.toList()).size() >= 1) {
                     List<String> links = c.getLinks();
                     links.add(s);
                     c.setLinks(links);
@@ -494,8 +596,12 @@ public class MainController {
             if (links.contains(bc.toString()))
                 filteredLinks.add(bc);
 
-        cases.setAll(filteredLinks);
-        caseList.setItems(cases);
+        if (filteredLinks.size() == 0) {
+            Dialogs.WarningDialog("Nie znaleziono powiązanych spraw", "Upewnij się, że wybrana pozycja jest poprawna", null);
+        } else {
+            cases.setAll(filteredLinks);
+            caseList.setItems(cases);
+        }
     }
 
 
@@ -574,6 +680,8 @@ public class MainController {
             FileOutputStream fos = new FileOutputStream(selectedFile);
             baos.writeTo(fos);
             Dialogs.InfoDialog("Plik pobrany pomyślnie", null);
+            baos.close();
+            fos.close();
         }
         catch (Exception e) {
             try {
@@ -605,6 +713,8 @@ public class MainController {
                 ByteArrayOutputStream baos = conn.downloadFile(c.getLetterNumber(), s);
                 FileOutputStream fos = new FileOutputStream(new File(selectedDirectory.toString() + "/" + file));
                 baos.writeTo(fos);
+                baos.close();
+                fos.close();
             }
             Dialogs.InfoDialog("Pliki pobrano pomyślnie", null);
         }

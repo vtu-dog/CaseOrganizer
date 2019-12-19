@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<SplitPane dividerPositions="0.28281117696867064" nodeOrientation="LEFT_TO_RIGHT" prefHeight="740.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<SplitPane dividerPositions="0.28281117696867064" maxHeight="740.0" maxWidth="1200.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="740.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
   <items>
     <AnchorPane maxWidth="330.0" minHeight="0.0" minWidth="330.0" prefHeight="160.0" prefWidth="100.0">
          <children>
@@ -36,32 +36,53 @@
                   </AnchorPane>
                   <HBox prefHeight="35.0">
                      <children>
-                        <TextField fx:id="searchBar" prefHeight="35.0" promptText="Wpisz frazę związaną ze sprawą" HBox.hgrow="ALWAYS" />
+                        <TextField fx:id="searchBar" prefHeight="35.0" promptText="Wpisz (po przecinku) frazy związane ze sprawą" HBox.hgrow="ALWAYS" />
                         <Button fx:id="searchButton" mnemonicParsing="false" onAction="#search" prefHeight="35.0" text="Szukaj" HBox.hgrow="ALWAYS" />
                      </children>
                   </HBox>
-                  <HBox minHeight="60.0" prefHeight="60.0" prefWidth="330.0">
+                  <VBox>
                      <children>
-                        <VBox prefHeight="200.0" prefWidth="100.0" spacing="7.0" HBox.hgrow="ALWAYS">
+                        <HBox minHeight="60.0" prefHeight="60.0" prefWidth="330.0">
                            <children>
-                              <CheckBox fx:id="activeCheckBox" mnemonicParsing="false" onAction="#setIsActive" selected="true" text="Aktywne" />
-                              <CheckBox fx:id="priorityCheckBox" mnemonicParsing="false" onAction="#setIsPriority" text="Priorytetowe" />
+                              <VBox prefHeight="200.0" prefWidth="100.0" spacing="7.0" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <CheckBox fx:id="activeCheckBox" mnemonicParsing="false" onAction="#setIsActive" selected="true" text="Aktywne" />
+                                    <CheckBox fx:id="priorityCheckBox" mnemonicParsing="false" onAction="#setIsPriority" text="Priorytetowe" />
+                                 </children>
+                                 <padding>
+                                    <Insets top="5.0" />
+                                 </padding>
+                                 <HBox.margin>
+                                    <Insets left="5.0" />
+                                 </HBox.margin>
+                              </VBox>
+                              <VBox prefHeight="200.0" prefWidth="100.0" spacing="7.0" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <CheckBox fx:id="pendingCheckBox" mnemonicParsing="false" onAction="#setIsPending" text="Oczekujące" />
+                                    <CheckBox fx:id="archivedCheckBox" mnemonicParsing="false" onAction="#setIsArchived" text="Zarchiwizowane" />
+                                 </children>
+                                 <padding>
+                                    <Insets top="5.0" />
+                                 </padding>
+                              </VBox>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" VBox.vgrow="ALWAYS">
+                           <children>
+                              <CheckBox fx:id="deadlineCheckBox" mnemonicParsing="false" onAction="#setIsActive" text="Krótki czas na odpowiedź (ilość dni:" HBox.hgrow="ALWAYS">
+                                 <padding>
+                                    <Insets right="5.0" />
+                                 </padding>
+                              </CheckBox>
+                              <TextField fx:id="deadlineTime" alignment="CENTER" maxWidth="30.0" promptText="3" />
+                              <Label text=" )" />
                            </children>
                            <padding>
-                              <Insets top="5.0" />
+                              <Insets bottom="5.0" left="5.0" />
                            </padding>
-                        </VBox>
-                        <VBox prefHeight="200.0" prefWidth="100.0" spacing="7.0" HBox.hgrow="ALWAYS">
-                           <children>
-                              <CheckBox fx:id="pendingCheckBox" mnemonicParsing="false" onAction="#setIsPending" text="Oczekujące" />
-                              <CheckBox fx:id="archivedCheckBox" mnemonicParsing="false" onAction="#setIsArchived" text="Zarchiwizowane" />
-                           </children>
-                           <padding>
-                              <Insets top="5.0" />
-                           </padding>
-                        </VBox>
+                        </HBox>
                      </children>
-                  </HBox>
+                  </VBox>
                   <VBox VBox.vgrow="ALWAYS">
                      <children>
                         <ListView fx:id="caseList" VBox.vgrow="ALWAYS" />
@@ -297,6 +318,12 @@
                                                       </Label>
                                                       <TextField fx:id="comments" alignment="BOTTOM_LEFT" minHeight="35.0" minWidth="269.0" />
                                                    </children>
+                                                   <opaqueInsets>
+                                                      <Insets />
+                                                   </opaqueInsets>
+                                                   <padding>
+                                                      <Insets bottom="2.0" />
+                                                   </padding>
                                                 </HBox>
                                                 <HBox prefHeight="35.0" prefWidth="544.0" VBox.vgrow="ALWAYS">
                                                    <children>

@@ -106,7 +106,12 @@ public class FTPConn {
             client.deleteFile("meta.xml");
         } catch (FTPException ignore) { }
 
-        client.upload("meta.xml", new ByteArrayInputStream(metaFile.toByteArray()), 0, 0, null);
+        ByteArrayInputStream bais = new ByteArrayInputStream(metaFile.toByteArray());
+
+        client.upload("meta.xml", bais, 0, 0, null);
+
+        metaFile.close();
+        bais.close();
     }
 
     public void replaceMetadata (BasicCase caseObj) throws Exception {
@@ -155,7 +160,14 @@ public class FTPConn {
 
             JAXBContext jaxbContext = JAXBContext.newInstance(BasicCase.class);
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-            return (BasicCase) jaxbUnmarshaller.unmarshal(new ByteArrayInputStream(metaFile.toByteArray()));
+
+            ByteArrayInputStream bais = new ByteArrayInputStream(metaFile.toByteArray());
+            BasicCase c = (BasicCase) jaxbUnmarshaller.unmarshal(bais);
+
+            metaFile.close();
+            bais.close();
+
+            return c;
         }
         catch (Exception e) {
             throw e;
@@ -210,6 +222,7 @@ public class FTPConn {
             client.deleteFile(ftpDir + getMD5(dir) + "/" + f.getName());
         } catch (Exception ignore) { }
         client.upload(ftpDir + getMD5(dir) + "/" + f.getName(), targetStream, 0, 0, null);
+        targetStream.close();
     }
 
     public ByteArrayOutputStream downloadFile (String dir, String filename) throws Exception {
